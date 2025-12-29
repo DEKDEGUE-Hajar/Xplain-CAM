@@ -6,9 +6,14 @@ XplainCAM is a python library that allows you to visualize which regions of an i
 ![All CAMs](output/dog/all_cams.png)
 
 ---
+## Installation
 
+The library can be installed directly via pip:
+
+```bash
+pip install xplaincam
 ## Quick Start: Single CAM Workflow
-
+```
 ### Retrieving the class activation map
 
 After initializing the CAM extractor, you can run inference as usual. By default, the class activation map is computed from the network’s last convolutional layer; to analyze a different layer, provide it explicitly via the `target_layer` argument in the constructor.
