@@ -187,8 +187,8 @@ InsertionDeletion.plot_curves(
 ```
 
 <p align="center">
-  <img src="output/dog/insertion/all_cams_insertion.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
-  <img src="output/dog/deletion/all_cams_deletion.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
+  <img src="output/dog/insertion/all_cams_insertion.png" alt="All CAMs Insertion" width="400" style="display:inline-block; margin-right:20px;" />
+  <img src="output/dog/deletion/all_cams_deletion.png" alt="All CAMs Deletion" width="400" style="display:inline-block;" />
 </p>
 
 ## Running the Scripts
@@ -251,7 +251,7 @@ python del_inser_evaluation.py \
 
 <p align="center">
   <img src="scripts/results/all_insertions_100.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
-  <img src="scripts/results/all_deletion_100.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
+  <img src="scripts/results/all_deletions_100.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
 </p>
 
 
