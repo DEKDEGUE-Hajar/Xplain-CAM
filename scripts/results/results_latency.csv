@@ -1,0 +1,9 @@
+CAM Method,Average Latency (s)
+GradCAM,0.0414
+GradCAM++,0.0176
+XGradCAM,0.0070
+ScoreCAM,2.9725
+GroupCAM,0.2025
+LayerCAM,0.0205
+UnionCAM,3.2520
+FusionCAM,3.0157
