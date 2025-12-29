@@ -1,5 +1,5 @@
 <h1 align="center">
-  XplainCAM: Explaining Convolutional Neural Networks Using Class Activation Maps.
+  Xplain-CAM: Explaining Convolutional Neural Networks Using Class Activation Maps.
 </h1>
 
 XplainCAM is a python library that allows you to visualize which regions of an image contribute most to a model's predictions and evaluate CAM quality with metrics like Average Drop/increase in confidence, Insertion, and Deletion.
@@ -251,7 +251,7 @@ python del_inser_evaluation.py \
 
 <p align="center">
   <img src="scripts/results/all_insertions_100.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
-  <img src="scripts/results/all_deletion_100.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
+  <img src="scripts/results/all_deletions_100.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
 </p>
 
 
