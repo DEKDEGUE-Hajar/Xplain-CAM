@@ -3,18 +3,15 @@
 </h1>
 
 XplainCAM is a python library that allows you to visualize which regions of an image contribute most to a model's predictions and evaluate CAM quality with metrics like Average Drop/increase in confidence, Insertion, and Deletion.
+
+
 ![All CAMs](https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/all_cams.png)
 
 ---
 
-## Installation
-
-The library can be installed directly via pip:
-
 ```bash
 pip install xplaincam
 ```
-
 ## Quick Start: Single CAM Workflow
 
 ### Retrieving the class activation map
@@ -46,7 +43,11 @@ with GradCAM(model, target_layer=None) as cam_extractor:
     cam = cam_extractor(input_tensor, class_idx=output.argmax(dim=1).item())
 
 ```
+
+
+<p align="center">
 <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog.png" alt="GradCAM dog" width="600" height="600"/>
+</p>
 
 You can also compute the CAM for the second most probable class to understand how the model focuses on alternative predictions.
 
@@ -59,7 +60,9 @@ with GradCAM(model, target_layer=None) as cam_extractor:
     cam = cam_extractor(input_tensor, class_idx=(output[0].topk(2).indices[1].item()))
 
 ```
+<p align="center">
 <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_cat.png" alt="GradCAM cat" width="600" height="600"/>
+</p>
 
 ### Evaluate with Average Drop/Increase
 Average Drop and Increase measure how much the model confidence decreases or increases when only the most relevant regions (according to the CAM) are retained.
@@ -120,8 +123,9 @@ InsertionDeletion.plot_curves(
 )
 ```
 
+<p align="center">
 <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_insertion.png" alt="GradCAM Dog Insertion" width="600" height="600"/>
-
+</p>
 
 ```python
 InsertionDeletion.plot_curves(
@@ -134,7 +138,9 @@ InsertionDeletion.plot_curves(
 )
 
 ```
+<p align="center">
 <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_deletion.png" alt="GradCAM Dog Deletion" width="600" height="600"/>
+</p>
 
 The plots show the confidence curve for the model as pixels are gradually inserted or deleted, providing a visual indication of CAM quality.
 
