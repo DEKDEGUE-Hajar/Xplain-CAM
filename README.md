@@ -3,9 +3,17 @@
 </h1>
 
 XplainCAM is a python library that allows you to visualize which regions of an image contribute most to a model's predictions and evaluate CAM quality with metrics like Average Drop/increase in confidence, Insertion, and Deletion.
-![All CAMs](output/dog/all_cams.png)
+![All CAMs](https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/all_cams.png)
 
 ---
+
+## Installation
+
+The library can be installed directly via pip:
+
+```bash
+pip install xplaincam
+```
 
 ## Quick Start: Single CAM Workflow
 
@@ -38,7 +46,7 @@ with GradCAM(model, target_layer=None) as cam_extractor:
     cam = cam_extractor(input_tensor, class_idx=output.argmax(dim=1).item())
 
 ```
-<img src="output/gradcam_dog.png" alt="GradCAM dog" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog.png" alt="GradCAM dog" width="600" height="600"/>
 
 You can also compute the CAM for the second most probable class to understand how the model focuses on alternative predictions.
 
@@ -51,7 +59,7 @@ with GradCAM(model, target_layer=None) as cam_extractor:
     cam = cam_extractor(input_tensor, class_idx=(output[0].topk(2).indices[1].item()))
 
 ```
-<img src="output/gradcam_cat.png" alt="GradCAM cat" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_cat.png" alt="GradCAM cat" width="600" height="600"/>
 
 ### Evaluate with Average Drop/Increase
 Average Drop and Increase measure how much the model confidence decreases or increases when only the most relevant regions (according to the CAM) are retained.
@@ -112,7 +120,7 @@ InsertionDeletion.plot_curves(
 )
 ```
 
-<img src="output/gradcam_dog_insertion.png" alt="GradCAM Dog Insertion" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_insertion.png" alt="GradCAM Dog Insertion" width="600" height="600"/>
 
 
 ```python
@@ -126,7 +134,7 @@ InsertionDeletion.plot_curves(
 )
 
 ```
-<img src="output/gradcam_dog_deletion.png" alt="GradCAM Dog Deletion" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_deletion.png" alt="GradCAM Dog Deletion" width="600" height="600"/>
 
 The plots show the confidence curve for the model as pixels are gradually inserted or deleted, providing a visual indication of CAM quality.
 
@@ -156,8 +164,8 @@ visualize_cam(
 
 ```
 
-![All CAMs](output/dog/all_cams.png)
-![All CAMs](output/cat/all_cams.png)
+![All CAMs](https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/all_cams.png)
+![All CAMs](https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/cat/all_cams.png)
 
 
 
@@ -187,8 +195,8 @@ InsertionDeletion.plot_curves(
 ```
 
 <p align="center">
-  <img src="output/dog/insertion/all_cams_insertion.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
-  <img src="output/dog/deletion/all_cams_deletion.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/insertion/all_cams_insertion.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/deletion/all_cams_deletion.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
 </p>
 
 ## Running the Scripts
@@ -250,8 +258,8 @@ python del_inser_evaluation.py \
 
 
 <p align="center">
-  <img src="scripts/results/all_insertions_100.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
-  <img src="scripts/results/all_deletions_100.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/scripts/results/all_insertions_100.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/scripts/results/all_deletions_100.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
 </p>
 
 
