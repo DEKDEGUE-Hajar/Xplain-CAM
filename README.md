@@ -8,10 +8,7 @@ XplainCAM is a python library that allows you to visualize which regions of an i
 ![All CAMs](https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/all_cams.png)
 
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 4744809ca5a59058bc4292ff771c9f28168e7563
 ## Installation
 
 The library can be installed directly via pip:
