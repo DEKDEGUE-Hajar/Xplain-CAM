@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="xplaincam",  
-    version="0.1.6",  
+    version="0.1.0",  
     author="DEKDEGUE Hajar",
     author_email="hajar.dekdegue@irit.fr",
     description="A package for CAM evaluation and visualization",
