@@ -7,11 +7,14 @@ XplainCAM is a python library that allows you to visualize which regions of an i
 
 ![All CAMs](https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/all_cams.png)
 
----
 
+## Installation
+
+The library can be installed directly via pip:
 ```bash
 pip install xplaincam
 ```
+
 ## Quick Start: Single CAM Workflow
 
 ### Retrieving the class activation map
@@ -46,7 +49,7 @@ with GradCAM(model, target_layer=None) as cam_extractor:
 
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog.png" alt="GradCAM dog" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog.png" alt="GradCAM dog" width="500" height="300"/>
 </p>
 
 You can also compute the CAM for the second most probable class to understand how the model focuses on alternative predictions.
@@ -61,7 +64,7 @@ with GradCAM(model, target_layer=None) as cam_extractor:
 
 ```
 <p align="center">
-<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_cat.png" alt="GradCAM cat" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_cat.png" alt="GradCAM cat" width="500" height="300"/>
 </p>
 
 ### Evaluate with Average Drop/Increase
@@ -124,7 +127,7 @@ InsertionDeletion.plot_curves(
 ```
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_insertion.png" alt="GradCAM Dog Insertion" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_insertion.png" alt="GradCAM Dog Insertion" width="500" height="300"/>
 </p>
 
 ```python
@@ -139,7 +142,7 @@ InsertionDeletion.plot_curves(
 
 ```
 <p align="center">
-<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_deletion.png" alt="GradCAM Dog Deletion" width="600" height="600"/>
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog_deletion.png" alt="GradCAM Dog Deletion" width="500" height="300"/>
 </p>
 
 The plots show the confidence curve for the model as pixels are gradually inserted or deleted, providing a visual indication of CAM quality.
@@ -201,8 +204,8 @@ InsertionDeletion.plot_curves(
 ```
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/insertion/all_cams_insertion.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
-  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/deletion/all_cams_deletion.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/insertion/all_cams_insertion.png" alt="All CAMs Insertion" width="300" style="display:inline-block; margin-right:20px;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/dog/deletion/all_cams_deletion.png" alt="All CAMs Deletion" width="300" style="display:inline-block;" />
 </p>
 
 ## Running the Scripts
@@ -264,8 +267,8 @@ python del_inser_evaluation.py \
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/scripts/results/all_insertions_100.png" alt="All CAMs Insertion" width="500" style="display:inline-block; margin-right:20px;" />
-  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/scripts/results/all_deletions_100.png" alt="All CAMs Deletion" width="500" style="display:inline-block;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/scripts/results/all_insertions_100.png" alt="All CAMs Insertion" width="300" style="display:inline-block; margin-right:20px;" />
+  <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/scripts/results/all_deletions_100.png" alt="All CAMs Deletion" width="300" style="display:inline-block;" />
 </p>
 
 
