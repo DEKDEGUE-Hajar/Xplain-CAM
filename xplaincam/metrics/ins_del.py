@@ -9,6 +9,7 @@ from kornia.filters import gaussian_blur2d
 import cv2
 
 class InsertionDeletion:
+
     """
     Insertion / Deletion evaluation for saliency maps.
 
@@ -18,23 +19,11 @@ class InsertionDeletion:
     - visualization
     """
 
-    def __init__(
-        self,
-        model,
-        mode="Insertion",
-        step=224*2,
-        blur_fn=None,
-        device=None
-    ):
-        assert mode in ["Insertion", "Deletion"]
+    def __init__(self, model, step=224*2, blur_fn=None, device=None):
         self.model = model.eval()
-        self.mode = mode
         self.step = step
         self.device = device or next(model.parameters()).device
-        self.blur_fn = blur_fn or (
-            lambda x: gaussian_blur2d(x, (51, 51), (50., 50.))
-        )
-
+        self.blur_fn = blur_fn or (lambda x: gaussian_blur2d(x, (51, 51), (50., 50.)))
         self.scores_ = None
         self.auc_ = None
 
@@ -42,18 +31,20 @@ class InsertionDeletion:
     # Core computation (NO visualization)
     # --------------------------------------------------
     @torch.no_grad()
-    def compute(self, image, heatmap, class_idx=None, return_steps=False):
+    def compute(self, image, heatmap, class_idx=None, mode="Insertion", return_steps=False):
         """
         Compute insertion/deletion scores.
 
         Args:
             image: (1,C,H,W)
             heatmap: (1,1,H,W) or (H,W)
+            mode: "Insertion" or "Deletion"
             return_steps: store full curve
 
         Returns:
             dict with AUC (+ steps if requested)
         """
+        assert mode in ["Insertion", "Deletion"], f"Mode must be 'Insertion' or 'Deletion', got {mode}"
         image = image.to(self.device)
         heatmap = heatmap.squeeze()
         H, W = heatmap.shape
@@ -63,10 +54,10 @@ class InsertionDeletion:
             class_idx = self.model(image).argmax(dim=1).item()
 
         # Initialize images
-        if self.mode == "Insertion":
+        if mode == "Insertion":
             start = self.blur_fn(image)
             finish = image.clone()
-        else:
+        else:  # Deletion
             start = image.clone()
             finish = torch.zeros_like(image)
 
@@ -88,14 +79,14 @@ class InsertionDeletion:
         self.scores_ = scores
         self.auc_ = self._auc(scores)
 
-        result = {f"{self.mode}_auc": self.auc_}
+        result = {"auc": self.auc_}  # unified key
         if return_steps:
-            result[f"{self.mode}_steps"] = scores
+            result["steps"] = scores
 
         return result
 
     # --------------------------------------------------
-    # Visualization (optional, explicit)
+    # Visualization (unchanged)
     # --------------------------------------------------
     @staticmethod
     def plot_curves(results, mode="Insertion", image=None, cam=None, alpha=0.5, title=None, save_path=None):
@@ -117,14 +108,14 @@ class InsertionDeletion:
         """
 
         # Detect single vs multiple CAMs
-        is_single = isinstance(results, dict) and f"{mode}_steps" in results
+        is_single = isinstance(results, dict) and "steps" in results
 
         if is_single:
             if image is None or cam is None:
                 raise ValueError("image and cam must be provided for single-CAM plotting")
 
-            steps = results[f"{mode}_steps"]
-            auc_val = results[f"{mode}_auc"]
+            steps = results["steps"]
+            auc_val = results["auc"]
             n = len(steps)
             x = np.linspace(0, 1, n)
 
@@ -156,8 +147,8 @@ class InsertionDeletion:
             # Multiple CAMs → curves only
             plt.figure(figsize=(6, 5))
             for name, res in results.items():
-                steps = res[f"{mode}_steps"]
-                auc_val = res[f"{mode}_auc"]
+                steps = res["steps"]
+                auc_val = res["auc"]
                 x = np.linspace(0, 1, len(steps))
                 plt.plot(x, steps, label=f"{name} (AUC={auc_val:.4f})")
             plt.xlabel("Fraction of Pixels")
@@ -182,3 +173,5 @@ class InsertionDeletion:
     @staticmethod
     def _auc(scores):
         return (scores.sum() - scores[0]/2 - scores[-1]/2) / (len(scores) - 1)
+
+

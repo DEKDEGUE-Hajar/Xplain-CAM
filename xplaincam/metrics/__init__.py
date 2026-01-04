@@ -1,2 +1,7 @@
-from .avg_drop_conf import *
-from .ins_del_gc import *
+from .drop__increase_conf import AvgDropConf
+from .ins_del import InsertionDeletion
+
+__all__ = [
+    "AvgDropConf",
+    "InsertionDeletion",
+]

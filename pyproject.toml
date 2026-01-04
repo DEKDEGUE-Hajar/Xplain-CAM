@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xplaincam"
+version = "0.2.0"
+description = "A Python library for explaining CNN predictions using Class Activation Maps (CAMs)"
+readme = "README.md"
+requires-python = ">=3.8"
+
+authors = [
+    { name = "", email = "" }
+]
+
+keywords = [
+    "explainable-ai",
+    "xai",
+    "cam",
+    "grad-cam",
+    "computer-vision",
+    "deep-learning"
+]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10"
+]
+
+dependencies = [
+    "torch>=1.10",
+    "torchvision>=0.11",
+    "numpy",
+    "Pillow",
+    "matplotlib",
+    "tqdm"
+]
+
+[project.urls]
+Homepage = "https://github.com/USERNAME/xplaincam"
+Repository = "https://github.com/USERNAME/xplaincam"
+Issues = "https://github.com/USERNAME/xplaincam/issues"
+
+
+[tool.setuptools.packages.find]
+where = ["."]

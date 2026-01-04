@@ -9,12 +9,11 @@ from .basecam import BaseCAM
 class XGradCAM(BaseCAM):
     """
     XGrad-CAM: Scales each feature map by the ratio of its weighted gradient 
-    sum to its total activation, emphasizing neurons proportionally to their influence.
+    sum to its total activation.
 
     Reference:
-        Fu et al., XGrad-CAM: Explicit Gradient-based Localization
-        for Deep Networks. BMVC 2020.
-        https://arxiv.org/abs/2004.10528
+        Fu et al., "Axiom-based Grad-CAM: Towards Accurate Visualization and Explanation of CNNs"
+        https://arxiv.org/pdf/2008.02312
     """
 
     def __init__(

@@ -16,6 +16,7 @@ The library can be installed directly via pip:
 pip install xplaincam
 ```
 
+
 ## Quick Start: Single CAM Workflow
 
 ### Retrieving the class activation map
@@ -28,23 +29,32 @@ from torchvision.models import vgg19
 from torchvision.transforms.functional import to_tensor, resize, normalize
 from PIL import Image
 from xplaincam.cam import GradCAM
+from xplaincam.utils import visualize_cam
 
-# Configuration
+# --- Configuration ---
 IMAGE_PATH = "path/to/your/image.png"
 model = vgg19(pretrained=True).eval()
 
-# Image preparation
+# --- Image preparation ---
 img = Image.open(IMAGE_PATH).convert("RGB")
+img_tensor = resize(to_tensor(img), (224, 224))  # (3,H,W)
+
 input_tensor = normalize(
-    to_tensor(resize(img, (224, 224))),
+    img_tensor,
     mean=[0.485, 0.456, 0.406],
     std=[0.229, 0.224, 0.225]
 ).unsqueeze(0)
 
-#  Compute CAM for the top-1 predicted class
-with GradCAM(model, target_layer=None) as cam_extractor:
+# For visualization (unnormalized)
+img_show = img_tensor.unsqueeze(0)
+
+# --- Compute CAM ---
+with GradCAM(model) as cam_extractor:
     output = model(input_tensor)
     cam = cam_extractor(input_tensor, class_idx=output.argmax(dim=1).item())
+
+# --- Visualize ---
+visualize_cam(img=img_show, cams={"GradCAM": cam})
 
 ```
 
@@ -53,15 +63,17 @@ with GradCAM(model, target_layer=None) as cam_extractor:
 <img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/gradcam_dog.png" alt="GradCAM dog" width="500" height="300"/>
 </p>
 
-You can also compute the CAM for the second most probable class to understand how the model focuses on alternative predictions.
+You can compute the CAM for other objects present in the image by changing the `class_idx` to visualize how the model attends to alternative classes.
 
 
 ```python
+# ImageNet class IDs (used in this example)
+DOG_CLASS = 243   # “bull mastiff”
+CAT_CLASS = 281   # “tabby cat”
 
-# Compute CAM for the second most probable class
 with GradCAM(model, target_layer=None) as cam_extractor:
     output = model(input_tensor)
-    cam = cam_extractor(input_tensor, class_idx=(output[0].topk(2).indices[1].item()))
+    cam = cam_extractor(input_tensor, class_idx = CAT_CLASS)
 
 ```
 <p align="center">
@@ -91,20 +103,20 @@ Insertion and Deletion are fidelity metrics:
 Both metrics produce a curve of confidence vs. pixels added/removed, and the AUC (Area Under Curve) summarizes the overall performance.
 
 ```python
+
 from xplaincam.metrics import InsertionDeletion
 
+InsertionDeletion = InsertionDeletion(model=model)
+
 # Insertion
-ins = InsertionDeletion(model=model, mode="Insertion")
-# Returns a dictionary of results, including confidence steps and AUC
-ins_result = ins.compute(image=input_tensor, heatmap=cam, return_steps=True)
+ins_result = InsertionDeletion.compute(image=input_tensor, heatmap=cam, mode="Insertion", return_steps=True)
 
 # Deletion
-dele = InsertionDeletion(model=model, mode="Deletion")
-del_result = dele.compute(image=input_tensor, heatmap=cam, return_steps=True)
+del_result = InsertionDeletion.compute(image=input_tensor, heatmap=cam, mode="Deletion", return_steps=True)
 
-# Print AUC values
 print(f"Insertion AUC: {ins_result['auc']:.4f}")
 print(f"Deletion AUC: {del_result['auc']:.4f}")
+
 
 ```
 ### Plot Insertion and Deletion Curves
@@ -120,11 +132,12 @@ os.makedirs("outputs", exist_ok=True)
 InsertionDeletion.plot_curves(
     results=ins_result,
     mode="Insertion",
-    image=img.unsqueeze(0),
+    image=img_show,
     cam=cam,
     alpha=0.6,
     save_path=os.path.join("output", "gradcam_insertion.png")
 )
+
 ```
 
 <p align="center">
@@ -135,7 +148,7 @@ InsertionDeletion.plot_curves(
 InsertionDeletion.plot_curves(
     results=del_result,
     mode="Deletion",
-    image=img.unsqueeze(0),
+    image=img_show,
     cam=cam,
     alpha=0.6,
     save_path=os.path.join("output", "gradcam_deletion.png")
@@ -273,6 +286,44 @@ python del_inser_evaluation.py \
 </p>
 
 
+
+## FusionCAM: Combining Gradient- and Region-Based Class activtion Maps
+*Toward more complete and robust class activation maps*
+
+Class activation map (CAM) techniques can be broadly divided into gradient-based methods (e.g., GradCAM, GradCAM++, XGradCAM) and region-based methods (e.g., ScoreCAM, GroupCAM, AblationCAM, ISCAM, SSCAM). These two families capture complementary aspects of model explanations.
+
+**By default, FusionCAM combines GradCAM (gradient-based) and ScoreCAM (region-based).**
+This default configuration provides a strong balance between **class-discriminative sensitivity** and **spatial coherence**, making it a robust baseline for most visual explanation tasks.
+
+FusionCAM is not limited to this default setup and can fuse any combination of gradient-based and region-based CAM techniques.
+
+### Custom FusionCAM Examples
+
+```python
+cams = {}
+fusion_cams = {
+    "FusionCAM(Grad_SS)": (GradCAM, SSCAM),
+    "FusionCAM(Gradpp_IS)": (GradCAMpp, ISCAM),
+    "FusionCAM(XGrad_Abl)": (XGradCAM, AblationCAM),
+}
+
+for name, (gcam, rcam) in fusion_cams.items():
+    with FusionCAM(model, target_layer=None, grad_cam=gcam, region_cam=rcam) as cam:
+        output = model(input_tensor)
+        cams[name] = cam(input_tensor, class_idx = CAT_CLASS)
+
+visualize_cam(img=img_show, cams=cams)
+```
+<p align="center">
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/fusioncams/all_gradcams.png" alt="GradCAMs" width="500" height="300"/>
+</p>
+<p align="center">
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/fusioncams/all_regioncams.png" alt="RegionCAMs" width="500" height="300"/>
+</p>
+<p align="center">
+<img src="https://raw.githubusercontent.com/DEKDEGUE-Hajar/Xplain-CAM/main/output/fusioncams/all_fusioncams.png" alt="Custom FusionCAM examples" width="500" height="300"/>
+</p>
+
 ## CAM Zoo
 
 This project is developed and maintained by the repo owner, but the implementation was based on the following research papers:
@@ -282,7 +333,7 @@ This project is developed and maintained by the repo owner, but the implementati
 - [Grad-CAM++](https://arxiv.org/abs/1710.11063): Extends Grad-CAM by using weighted combination of first- and second-order gradients for better localization of multiple occurrences of the target object.
 - [Integrated Gradients](https://arxiv.org/abs/1703.01365): Attributes model predictions to input features by integrating gradients along a straight path from a baseline to the input.
 - [Layer-CAM](http://mftp.mmcheng.net/Papers/21TIP_LayerCAM.pdf): Generates CAMs by computing pixel-wise gradient contributions at intermediate layers for more precise localization.
-- [XGrad-CAM](https://arxiv.org/abs/2004.10528): Refines Grad-CAM by normalizing gradient weights and enhancing sensitivity and conservation of activations.
+- [XGrad-CAM](https://arxiv.org/pdf/2008.02312): Refines Grad-CAM by normalizing gradient weights and enhancing sensitivity and conservation of activations.
 - [Score-CAM](https://arxiv.org/pdf/1910.01279.pdf): Weights feature maps by measuring the increase in class score when each map is masked, then linearly combines the maps based on these scores.
 - [Ablation-CAM](https://openaccess.thecvf.com/content_WACV_2020/papers/Desai_Ablation-CAM_Visual_Explanations_for_Deep_Convolutional_Network_via_Gradient-free_Localization_WACV_2020_paper.pdf): Evaluates the decrease in class score when each feature map is removed (ablated). and combines contributions to highlight class-relevant regions.
 - [Group-CAM](https://arxiv.org/pdf/2103.13859): Divides feature maps into groups, evaluates each group’s effect on the class score, and combines them to generate the final CAM.
@@ -290,7 +341,6 @@ This project is developed and maintained by the repo owner, but the implementati
 - [IS-CAM](https://arxiv.org/abs/2010.03023): Gradually scales each activation map from zero to full averaging class-score effects to improve attribution.
 - [Union-CAM](https://www.frontiersin.org/journals/neurorobotics/articles/10.3389/fnbot.2024.1490198/full): Combines gradient and region-based maps, using denoising, linear combination and choosing the one with the higher class score.
 - [Fusion-CAM](https://arxiv.org): Fuses gradient and region-based CAMs using denoising, linear combination, and similarity-based fusion to produce the final map.
-
 
 
 ## Citation
