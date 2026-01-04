@@ -127,8 +127,6 @@ Visualize how confidence changes as pixels are added or removed.
 import os
 from xplaincam.metrics import InsertionDeletion
 
-os.makedirs("outputs", exist_ok=True)
-
 InsertionDeletion.plot_curves(
     results=ins_result,
     mode="Insertion",

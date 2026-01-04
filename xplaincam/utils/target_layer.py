@@ -1,8 +1,4 @@
-# Copyright (C) 2020-2025, François-Guillaume Fernandez.
 from __future__ import annotations
-
-# This program is licensed under the Apache License 2.0.
-# See LICENSE or go to <https://www.apache.org/licenses/LICENSE-2.0> for full license details.
 
 from functools import partial
 
