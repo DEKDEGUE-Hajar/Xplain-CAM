@@ -293,7 +293,9 @@ Class activation map (CAM) techniques can be broadly divided into gradient-based
 **By default, FusionCAM combines GradCAM (gradient-based) and ScoreCAM (region-based).**
 This default configuration provides a strong balance between **class-discriminative sensitivity** and **spatial coherence**, making it a robust baseline for most visual explanation tasks.
 
-FusionCAM is not limited to this default setup and can fuse any combination of gradient-based and region-based CAM techniques.
+> **Note:** `FusionCAM is not limited to this default setup and can fuse any combination of gradient-based and region-based CAM techniques.  
+> Simply specify the desired gradient CAM in `grad_cam` and the region CAM in `region_cam`.
+
 
 ### Custom FusionCAM Examples
 
